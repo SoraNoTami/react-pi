@@ -1,25 +1,37 @@
-import logo from './logo.svg';
-import './App.css';
+import axios from 'axios';
+import React from 'react';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+class App extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      pi: null,
+    }
+  }
+  componentDidMount = () => {
+    axios('https://api.pi.delivery/v1/pi?start=0&numberOfDigits=30').then( (resultat) => {
+      console.log(resultat)
+      console.log(resultat.data.content)
+      this.setState({pi : resultat.data.content})
+
+    })
+  }
+
+  
+
+  render() {
+    if (this.state.pi === null) {
+      return (
+        <h2>Aucune valeur disponible</h2>
+      )
+    } else {
+      return (
+        <div>
+          {this.state.pi.charAt(0) + "," + this.state.pi.substring(1) }
+        </div>
+      );
+    }
+  }
 }
 
 export default App;
